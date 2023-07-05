@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Suche{% endblock %}
+{% block content %}
+<br>
+<div class="container">
+    <form>
+        <div class="form-group">
+            <label for="filter">Filter by Username:</label>
+            <input type="text" class="form-control" id="filter" name="filter" placeholder="Enter username">
+        </div>
+    </form>
+
+    <h4>Users:</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Permissions</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="userList">
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.permissions }}</td>
+                <td><a href="/profile/{{ user.id }}" class="btn btn-primary">View Profile</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.getElementById('filter').addEventListener('input', function () {
+        var filterValue = this.value.toLowerCase();
+        var userList = document.getElementById('userList').getElementsByTagName('tr');
+
+        for (var i = 0; i < userList.length; i++) {
+            var username = userList[i].getElementsByTagName('td')[1].textContent.toLowerCase();
+            if (filterValue && !username.startsWith(filterValue)) {
+                userList[i].style.display = 'none';
+            } else {
+                userList[i].style.display = 'table-row';
+            }
+        }
+    });
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('query');
+
+    // Set the input value to the query
+    const searchInput = document.getElementById('filter');
+    searchInput.value = query;
+
+    // Simulate an input event on the search input field
+    const inputEvent = new Event('input', { bubbles: true });
+    searchInput.dispatchEvent(inputEvent);
+</script>
+{% endblock %}

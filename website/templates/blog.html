@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Blog{% endblock %}
+{% block content %}
+    <br>
+    {%  if user %}
+    <form id="blog" method="POST" action="/blog" enctype="multipart/form-data" class="card col-9">
+        <div class="card-body">
+          <div class="form-group">
+                <div class="form-row">
+                    <div class="col-11">
+                        <label for="msg" class="sr-only">Message</label>
+                        <textarea id="msg" name="msg" class="form-control" placeholder="Message" required autofocus></textarea>
+                    </div>
+                </div>
+                <br>
+                <div class="form-row">
+                    <label for="uploaded_file" class="sr-only">File</label>
+                    <select id="uploaded_file" name="uploaded_file" class="form-control">
+                        <option value="None">Select File</option>
+                        {% for file in uploaded_files %}
+                            <option value="{{ file.id }}">{{ file.file_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <br>
+                <div class="form-row" style="margin: 5px">
+                    <p style="margin-right: 10px">Or Upload a new File:</p>
+                    <div>
+                        <label for="file" class="sr-only">New File</label>
+                        <input type="file" id="file" name="file" class="form-control-file">
+                    </div>
+                    <div class="mb-3">
+                    <label for="directory" class="form-label">Select Directory:</label>
+                    <select class="form-select" id="directory" name="directory">
+                        {% for directory in directories %}
+                            <option value="{{ directory.id }}">{{ directory.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                </div>
+            </div>
+            <button id="blogSubmitButton" class="btn btn-primary" type="submit">Submit</button>
+        </div>
+    </form>
+    {% endif %}
+    <br>
+    {% for post in posts %}
+        <div class="card w-75">
+            <div class="card-body">
+                {% if user %}
+                    {% if post.user_id == user.id %}
+                    <button type="button" class="close" aria-label="Close" id="deleteButton" onclick="deletepost({{ post.id }})">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    {% endif %}
+                {% endif %}
+                {{ post.date }}
+                <h5 class="card-title">{{ post.username }}</h5>
+                <p class="card-text">{{ post.message }}</p>
+                {% if post.file_id != "None" %}
+                <a href="/download/{{ post.file_id }}" class="btn btn-primary">Download File</a>
+                {% endif %}
+                <a href="/blog/{{ post.id }}" class="btn btn-primary">Open Post</a>
+            </div>
+        </div>
+        </br>
+    {% endfor %}
+{% endblock %}

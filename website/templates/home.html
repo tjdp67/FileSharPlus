@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="container" style="margin: 20px">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <img src="../static/svg/upload.svg" class="card-img-top" alt="Upload Icon" width="64" height="64" style="margin: 20px">
+        <div class="card-body">
+          <h5 class="card-title">Upload Files</h5>
+          <p class="card-text">Easily upload your files to our platform and store them securely.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <img src="../static/svg/file-earmark-check.svg" class="card-img-top" alt="Attach Icon" width="64" height="64" style="margin: 20px">
+        <div class="card-body">
+          <h5 class="card-title">Attach Files to Posts</h5>
+          <p class="card-text">Attach your uploaded files to your posts, making them easily accessible to your audience.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <img src="../static/svg/share.svg" class="card-img-top" alt="Share Icon" width="64" height="64" style="margin: 20px">
+        <div class="card-body">
+          <h5 class="card-title">Share Files</h5>
+          <p class="card-text">Share your files with others by generating secure download links or granting permissions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

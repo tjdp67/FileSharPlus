@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Admin - Tickets{% endblock %}
+{% block content %}
+<div class="container">
+    <h2>All Tickets</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Ticket ID</th>
+                <th>User</th>
+                <th>Title</th>
+                <th>Submitted Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ticket in tickets %}
+            <tr>
+                <td>#{{ ticket.id }}</td>
+                <td>{{ ticket.username }}</td>
+                <td><a href="/ticket/{{ ticket.id }}">{{ ticket.title }}</a></td>
+                <td>{{ ticket.date }}</td>
+                <td>{{ ticket.status }}</td>
+                <td>
+                    <form action="/admin/tickets/delete/{{ ticket.id }}" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                    <form action="/admin/tickets/update-status/{{ ticket.id }}/Pending" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-warning">Pending</button>
+                    </form>
+                    <form action="/admin/tickets/update-status/{{ ticket.id }}/Unsolved" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-danger">Unsolved</button>
+                    </form>
+                    <form action="/admin/tickets/update-status/{{ ticket.id }}/Solved" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-success">Solved</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

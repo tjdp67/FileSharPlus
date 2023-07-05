@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block title %}Upload{% endblock %}
+{% block content %}
+<br>
+<div class="container">
+    <div class="row" style="margin-bottom: 10px">
+        <div class="card col-sm">
+            <div class="card-body">
+            <h1>File Upload</h1>
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="file" class="form-label">Select File:</label>
+                    <input type="file" class="form-control" id="file" name="file">
+                </div>
+
+                <div class="mb-3">
+                    <label for="directory" class="form-label">Select Directory:</label>
+                    <select class="form-select" id="directory" name="directory">
+                        {% for directory in directories %}
+                            <option value="{{ directory.id }}">{{ directory.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Privacy:</label>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="privacy" value="private" id="private" checked>
+                        <label class="form-check-label" for="private">Private</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="privacy" value="public" id="public">
+                        <label class="form-check-label" for="public">Public</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
+            </div>
+        </div>
+        <div class="card col-sm" style="margin-left: 10px">
+            <div class="card-body">
+                <h1>Create Directory</h1>
+                <form id="createDirectoryForm" method="POST" action="/create-directory">
+                  <div class="form-group">
+                    <label for="directoryName">Directory Name:</label>
+                    <input type="text" id="directoryName" name="directoryName" class="form-control" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Create Directory</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+<div class="card-body">
+    <h2>Uploaded Files</h2>
+<!-- Dropdown filter by directory name -->
+<div class="mb-3">
+    <label for="directory-filter" class="form-label">Filter by Directory:</label>
+    <select class="form-select" id="directory-filter" onchange="filterFilesByDirectory()">
+        <option value="">All</option>
+        {% for directory in directories %}
+            <option value="{{ directory.name }}">{{ directory.name }}</option>
+        {% endfor %}
+    </select>
+</div>
+<form>
+        <div class="form-group">
+            <label for="filter">Filter by File Name:</label>
+            <input type="text" class="form-control" id="filter" name="filter" placeholder="Enter file name">
+        </div>
+    </form>
+<table class="table table-striped">
+    <!-- Table header -->
+    <thead>
+        <tr>
+            <th>File Name</th>
+            <th>Privacy</th>
+            <th>Directory</th>
+            <th>Actions</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody id="file-table-body">
+        {% for file in files %}
+        <tr>
+            <td>{{ file.file_name }}</td>
+            <td>{{ file.privacy }}</td>
+            <td>/{{ file.directory_name }}</td>
+            <td>
+                {% if file.privacy == "public" %}
+                <a href="/toggle-privacy/{{ file.id }}">Make Private</a> |
+                {% else %}
+                <a href="/toggle-privacy/{{ file.id }}">Make Public</a> |
+                {% endif %}
+                <a href="/download/{{ file.id }}">Download</a>
+            </td>
+            <td><button class="delete-button" onclick="confirmDeleteFile('{{ file.id }}')">Delete</button></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+</div>
+<script>
+    document.getElementById('filter').addEventListener('input', function () {
+        var filterValue = this.value.toLowerCase();
+        var fileList = document.getElementById('file-table-body').getElementsByTagName('tr');
+
+        for (var i = 0; i < fileList.length; i++) {
+            var fileName = fileList[i].getElementsByTagName('td')[0].textContent.toLowerCase();
+            if (filterValue && !fileName.includes(filterValue)) {
+                fileList[i].style.display = 'none';
+            } else {
+                fileList[i].style.display = 'table-row';
+            }
+        }
+    });
+</script>
+{% endblock %}

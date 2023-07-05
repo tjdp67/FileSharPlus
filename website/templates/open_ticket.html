@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Open Ticket{% endblock %}
+{% block content %}
+<div class="container">
+    <h2>Open a Ticket</h2>
+    <form action="/open-ticket" method="post">
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+
+        <div class="form-group">
+            <label for="content">Content:</label>
+            <textarea class="form-control" id="content" name="content" rows="4" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <h4>Your Tickets:</h4>
+    <ul>
+        {% for ticket in user_tickets %}
+        <li>
+            <a href="/ticket/{{ ticket.id }}">
+                Ticket #{{ ticket.id }} - {{ ticket.title }} (Submitted: {{ ticket.date }})
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

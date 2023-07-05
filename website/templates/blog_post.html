@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Blog Post{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="card w-75">
+        <div class="card-body">
+            {% if user %}
+                {% if post.user_id == user.id %}
+                <button type="button" class="close" aria-label="Close" id="deleteButton">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {% endif %}
+            {% endif %}
+            <p>{{ post.date }}</p>
+            <h5 class="card-title">{{ post.username }}</h5>
+            <p class="card-text">{{ post.message }}</p>
+            {% if post.file_id != "None" %}
+            <a href="/download/{{ post.file_id }}" class="btn btn-primary">Download File</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <h4>Comments:</h4>
+    {% for comment in comments %}
+    <div class="card w-75">
+        <div class="card-body">
+            {% if user %}
+                {% if post.user_id == user.id or user.permissions == 'admin' %}
+                <button type="button" class="close" aria-label="Close" id="deleteButton" onclick="deleteComment('{{ comment.id }}','{{ post.id }}')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {% endif %}
+            {% endif %}
+            <p>{{ comment.date }}</p>
+            <h5 class="card-title">{{ comment.username }}</h5>
+            <p class="card-text">{{ comment.content }}</p>
+        </div>
+    </div>
+    {% endfor %}
+
+    <h4>Add a Comment:</h4>
+    <form id="commentForm" method="POST" action="/blog/{{ post.id }}/comment">
+        <div class="form-group">
+            <label for="content">Comment:</label>
+            <textarea class="form-control" id="content" name="content" rows="4" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit Comment</button>
+    </form>
+</div>
+
+{% endblock %}

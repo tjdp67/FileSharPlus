@@ -1,0 +1,14 @@
+jinja2
+markupsafe
+werkzeug
+click
+blinker
+itsdangerous
+certifi
+greenlet
+idna
+urllib3
+sqlalchemy
+flask
+requests
+flask-sqlalchemy

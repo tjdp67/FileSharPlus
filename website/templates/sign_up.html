@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Sign Up{% endblock %}
+{% block content %}
+<form id="signup" method="POST" action="/signup" class="form-signin">
+    <img class="mb-4" src="/static/svg/thm.svg" alt="">
+    <h1 class="h3 mb-3 font-weight-normal">{{ title }}</h1>
+
+    <label for="username" class="sr-only">Username</label>
+    <input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
+
+    <label for="password" class="sr-only">Password</label>
+    <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+
+    <label for="password" class="sr-only">Password</label>
+    <input type="password" id="password_confirm" name="password_confirm" class="form-control" placeholder="Repeat Password" oninput="check()" required>
+
+    <button class="btn btn-primary" type="submit">Sign up</button>
+</form>
+{% endblock %}

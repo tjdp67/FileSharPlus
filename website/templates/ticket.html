@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Ticket #{{ ticket.id }}{% endblock %}
+{% block content %}
+<div class="container">
+    <h2>
+        <span class="badge {% if ticket.status == 'Pending' %}badge-warning{% elif ticket.status == 'Unsolved' %}badge-danger{% elif ticket.status == 'Solved' %}badge-success{% endif %}">
+            {{ ticket.status }}
+        </span>
+        #{{ ticket.id }} - {{ ticket.title }}
+    </h2>
+
+    <h4>Submitted: {{ ticket.date }}</h4>
+    <h4>By: {{ username }}</h4>
+    <p>Initial Message:</p>
+    <p>{{ ticket.content }}</p>
+
+    <!-- Display existing messages related to the ticket -->
+    {% for message in ticket_messages %}
+        <div class="card w-75">
+            <div class="card-body">
+                {{ message.date }}
+                <h5 class="card-title">{{ message.username }}</h5>
+                <p class="card-text">{{ message.content }}</p>
+            </div>
+        </div></br>
+    {% endfor %}
+
+    <!-- Form for sending a new message related to the ticket -->
+    <form action="/ticket/{{ ticket.id }}" method="post">
+        <div class="form-group">
+            <label for="message">Message:</label>
+            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Send Message</button>
+    </form>
+
+    <!-- Display ticket actions for admin users -->
+    {% if user.permissions == 'admin' %}
+        <div class="mt-4">
+            <form action="/admin/tickets/delete/{{ ticket.id }}" method="POST" style="display: inline;">
+                <button type="submit" class="btn btn-danger">Delete Ticket</button>
+            </form>
+            <form action="/admin/tickets/update-status/{{ ticket.id }}/Pending" method="POST" style="display: inline;">
+                <button type="submit" class="btn btn-warning">Set Pending</button>
+            </form>
+            <form action="/admin/tickets/update-status/{{ ticket.id }}/Unsolved" method="POST" style="display: inline;">
+                <button type="submit" class="btn btn-danger">Set Unsolved</button>
+            </form>
+            <form action="/admin/tickets/update-status/{{ ticket.id }}/Solved" method="POST" style="display: inline;">
+                <button type="submit" class="btn btn-success">Set Solved</button>
+            </form>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

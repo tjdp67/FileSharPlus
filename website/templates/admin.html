@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Admin{% endblock %}
+{% block content %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">ID #</th>
+            <th scope="col">Username</th>
+            <th scope="col">Password</th>
+            <th scope="col">Permissions</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+        <tr>
+            <th scope="col">{{ user.id }}</th>
+            <td>{{ user.username }}</td>
+            <td>{{ user.password }}</td>
+            <td>{{ user.permissions }}</td>
+            <td>
+                {% if user.permissions != 'admin' %}
+                <button onclick="confirmDeleteUser({{ user.id }})">Delete</button>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

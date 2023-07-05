@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Chat{% endblock %}
+{% block content %}
+<h1>User Messaging</h1>
+
+<!-- Form to send a message -->
+<form id="sendForm">
+    <label for="sender">Sender:</label>
+    <input type="text" id="sender" required><br>
+
+    <label for="receiver">Receiver:</label>
+    <input type="text" id="receiver" required><br>
+
+    <label for="message">Message:</label>
+    <input type="text" id="message" required><br>
+
+    <button type="submit">Send Message</button>
+</form>
+
+<!-- Container to display received messages -->
+<div id="messageContainer"></div>
+{% endblock %}
